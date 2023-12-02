@@ -27,6 +27,8 @@ public class Day02 : BaseDay
         public int GMax { get; private set; }
         public int BMax { get; private set; }
 
+        public int Power { get { return RMax * GMax * BMax; } } 
+
         public Game()
         {
             RMax = 0;
@@ -43,23 +45,22 @@ public class Day02 : BaseDay
         }
     }
 
-    private void solve1()
+    private List<Game> parseFile()
     {
         List<Game> games = new List<Game>();
-
-        foreach(String s in _input)
+        foreach (String s in _input)
         {
-            Game g = new Game();                 
+            Game g = new Game();
             g.Id = AoCHelper.GetNumsFromStr(s).First();
             foreach (var a in s.Split(':').Last().Split(';'))
-            {                
+            {
                 int red = 0;
                 int green = 0;
-                int blue = 0;                
-                var rbg = a.Split(',');                
+                int blue = 0;
+                var rbg = a.Split(',');
                 foreach (var b in rbg)
-                {                
-                    int qty = AoCHelper.GetNumsFromStr(b).First();                    
+                {
+                    int qty = AoCHelper.GetNumsFromStr(b).First();
                     switch (b.Split(' ').Last())
                     {
                         case "red":
@@ -71,14 +72,20 @@ public class Day02 : BaseDay
                         case "blue":
                             blue = qty;
                             break;
-                    }                                        
+                    }
                 }
                 ValueTuple<int, int, int> vals = new ValueTuple<int, int, int>(red, green, blue);
                 g.AddView(vals);
             }
             games.Add(g);
         }
+        return games;
+    }
 
+    private void solve1()
+    {
+        List<Game> games = parseFile();
+        
         int total = 0;
         foreach (Game g in games)
         {
@@ -96,6 +103,14 @@ public class Day02 : BaseDay
 
     private void solve2()
     {
-        _partTwo = "Not Solved";
+        List<Game> games = parseFile();
+
+        int total = 0;
+        foreach (Game g in games)
+        {
+            total += g.Power;
+        }
+
+        _partTwo = total.ToString();
     }
 }
