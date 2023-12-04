@@ -1,4 +1,6 @@
 ﻿
+using System.Text.RegularExpressions;
+
 namespace AdventOfCode;
 
 public class Day04 : BaseDay
@@ -23,12 +25,22 @@ public class Day04 : BaseDay
         int total = 0;
         foreach (string s in  _input)
         {
-            total += getPoints(AoCHelper.GetNumsFromStr(s));
+            int match = getMatches(AoCHelper.GetNumsFromStr(s));
+            int points = 0;
+            if (match > 0)
+            {
+                points = 1;
+                for (int i = 0; i < match - 1; i++)
+                {
+                    points *= 2;
+                }
+            }
+            total += points;
         }
         _partOne = total.ToString();
     }
 
-    private int getPoints(int[] ints)
+    private int getMatches(int[] ints)
     {
         HashSet<int> winning = new HashSet<int>();
         for (int i = 1; i < 11;  i++)
@@ -46,19 +58,9 @@ public class Day04 : BaseDay
         foreach (int i in nums)
         {
             if (winning.Contains(i)) match++;
-        }
+        }        
 
-        int points = 0;
-        if (match > 0)
-        {
-            points = 1;
-            for (int i = 0; i < match - 1; i++)
-            {
-                points *= 2;
-            }
-        }
-
-        return points;
+        return match;
     }
 
     public override ValueTask<string> Solve_2()
@@ -69,6 +71,26 @@ public class Day04 : BaseDay
 
     private void solve2()
     {
-        _partTwo = "Not Solved";
+        int[] numCards = new int[212];
+        Array.Fill(numCards, 1);
+
+        int[] matches = new int[212];
+        for (int i = 0; i < 212; i++)
+        {
+            matches[i] = getMatches(AoCHelper.GetNumsFromStr(_input[i]));
+        }
+                
+        for (int i = 0; i < _input.Length; i++)
+        {
+            for (int j = 0; j < numCards[i]; j++)
+            {
+                for (int k = 0; k < matches[i]; k++)
+                {
+                    numCards[i + k + 1]++;
+                }
+            }
+        }
+
+        _partTwo = numCards.Sum().ToString();
     }
 }
