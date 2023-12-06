@@ -25,17 +25,7 @@ public class Day04 : BaseDay
         int total = 0;
         foreach (string s in  _input)
         {
-            int match = getMatches(AoCHelper.GetNumsFromStr(s));
-            int points = 0;
-            if (match > 0)
-            {
-                points = 1;
-                for (int i = 0; i < match - 1; i++)
-                {
-                    points *= 2;
-                }
-            }
-            total += points;
+            total += (int)Math.Pow(2, getMatches(AoCHelper.GetNumsFromStr(s)) - 1);
         }
         _partOne = total.ToString();
     }

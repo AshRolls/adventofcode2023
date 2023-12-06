@@ -24,7 +24,7 @@ public class Day01 : BaseDay
         int total = 0;
         foreach (string s in _input)
         {
-            var nums = AoCHelper.GetIndividualNumsFromStr(s);
+            var nums = AoCHelper.GetSingleNumsFromStr(s);
             total += nums.First() * 10;
             total += nums.Last();
         }
