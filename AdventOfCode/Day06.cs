@@ -51,14 +51,13 @@ public class Day06 : BaseDay
 
     private void solve2()
     {
-        long time = AoCHelper.GetLongNumsFromStr(Regex.Replace(_input[0], @"\s+", ""))[0];
-        long dist = AoCHelper.GetLongNumsFromStr(Regex.Replace(_input[1], @"\s+", ""))[0];
+        long time = AoCHelper.GetLongNumsFromStr(AoCHelper.StripWhiteSpace(_input[0]))[0];
+        long dist = AoCHelper.GetLongNumsFromStr(AoCHelper.StripWhiteSpace(_input[1]))[0];
         long waysToBeat = 0;
 
         for (long t = 1; t <= time; t++)
         {
-            long cur = t * (time - t);
-            if (cur > dist) waysToBeat++;
+            if (t * (time - t) > dist) waysToBeat++;
         }     
 
         _partTwo = waysToBeat.ToString();

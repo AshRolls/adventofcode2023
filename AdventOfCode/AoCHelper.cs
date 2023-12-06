@@ -10,7 +10,7 @@ namespace AdventOfCode
     {
         public static int[] GetNumsFromStr(string s) => Array.ConvertAll(Regex.Matches(s, @"-?\d+").OfType<Match>().Select(m => m.Groups[0].Value).ToArray(), x => int.Parse(x));
         public static long[] GetLongNumsFromStr(string s) => Array.ConvertAll(Regex.Matches(s, @"-?\d+").OfType<Match>().Select(m => m.Groups[0].Value).ToArray(), x => long.Parse(x));
-        public static int[] GetIndividualNumsFromStr(string s) => Array.ConvertAll(Regex.Matches(s, @"-?\d{1}").OfType<Match>().Select(m => m.Value).ToArray(), x => int.Parse(x));
+        public static int[] GetSingleNumsFromStr(string s) => Array.ConvertAll(Regex.Matches(s, @"-?\d{1}").OfType<Match>().Select(m => m.Value).ToArray(), x => int.Parse(x));
 
         public static string ToDebugString<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         {
@@ -130,6 +130,11 @@ namespace AdventOfCode
             Array.Copy(buffer, i, result, 0, 32 - i);
 
             return new string(result);
+        }
+
+        public static string StripWhiteSpace(string str)
+        {
+            return Regex.Replace(str, @"\s+", "");
         }
     }    
 }
