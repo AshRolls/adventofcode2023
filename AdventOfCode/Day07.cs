@@ -180,44 +180,18 @@ public class Day07 : BaseDay
         {
             int distinct = h.cards.Distinct().Count(); 
             int jokers = h.cards.Where(x => x == 1).Count();
-            if (distinct == 5) // high card
-            {
-                if (jokers == 0) handTypes[6].Add(h);
-                else handTypes[5].Add(h);
-
-            }
-            else if (distinct == 4) // one pair
+            
+            if (distinct == 4) // one pair
             {
                 if (jokers == 0) handTypes[5].Add(h);
-                else if (jokers >= 1) handTypes[3].Add(h);                               
-            }
-            else if (distinct == 1) // five of a kind
-            {
-                handTypes[0].Add(h);
-            }
-            else if (distinct == 2)
-            {
-                if (jokers == 0)
-                {
-                    if (getMaxGroupCount(h) == 4) // four of a kind
-                    {
-                        handTypes[1].Add(h);                                         
-                    }
-                    else // full house
-                    {
-                        handTypes[2].Add(h);
-                    }
-                }
-                else handTypes[0].Add(h);
+                else handTypes[3].Add(h);                               
             }
             else if (distinct == 3)
             {
                 if (getMaxGroupCount(h) == 3) // three of a kind
                 {
                     if (jokers == 0) handTypes[3].Add(h);
-                    else if (jokers == 1) handTypes[1].Add(h);
-                    else if (jokers == 2) handTypes[0].Add(h);
-                    else if (jokers == 3) handTypes[1].Add(h);
+                    else handTypes[1].Add(h);
                 }
                 else // two pair
                 {
@@ -226,6 +200,31 @@ public class Day07 : BaseDay
                     else if (jokers >= 2) handTypes[1].Add(h);
                 }
             }
+            else if (distinct == 5) // high card
+            {
+                if (jokers == 0) handTypes[6].Add(h);
+                else handTypes[5].Add(h);
+            }
+            else if (distinct == 2)
+            {
+                if (jokers == 0)
+                {
+                    if (getMaxGroupCount(h) == 4) // four of a kind
+                    {
+                        handTypes[1].Add(h);
+                    }
+                    else // full house
+                    {
+                        handTypes[2].Add(h);
+                    }
+                }
+                else handTypes[0].Add(h);
+            }            
+            else if (distinct == 1) // five of a kind
+            {
+                handTypes[0].Add(h);
+            }           
+            
             else
             {
                 throw new Exception();
