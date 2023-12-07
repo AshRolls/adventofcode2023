@@ -74,7 +74,7 @@ namespace AdventOfCode
             return Math.Abs(fromX - toX) + Math.Abs(fromY - toY);
         }
 
-        // Chebyshev distance (diagonal move costs the same as lateral
+        // Chebyshev distance (diagonal move costs the same as lateral)
         public static int GetDiagonalDist(int fromX, int fromY, int toX, int toY)
         {
             int dx = Math.Abs(fromX - toX);
