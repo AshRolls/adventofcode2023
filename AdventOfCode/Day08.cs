@@ -29,7 +29,7 @@ public class Day08 : BaseDay
         public bool StartNode { get; set; } = false;
         public bool EndNode { get; set; } = false;
 
-        public long RepeatsOn { get; set; }    
+        public long RepeatsAfter { get; set; }    
         public long EndNodeOn { get; set; }
     }
 
@@ -107,33 +107,9 @@ public class Day08 : BaseDay
                 i++;
                 steps++;                
             }
-            n.RepeatsOn = steps - n.EndNodeOn;
+            n.RepeatsAfter = steps - n.EndNodeOn;
         }
 
-        long[] repeats = new long[simulNodes.Count];
-        long[] nextStep = new long[simulNodes.Count];
-        for (int i = 0; i < simulNodes.Count; i++)
-        {
-            repeats[i] = simulNodes[i].RepeatsOn;
-            nextStep[i] = simulNodes[i].EndNodeOn;
-        }
-
-        int nodeCount = simulNodes.Count;
-      
-        long step = nextStep.Max();
-        while (true)
-        {
-            for (int i = 0; i < simulNodes.Count; i++)
-            {
-                while (nextStep[i] < step)
-                {
-                    nextStep[i] += repeats[i];                                                                               
-                }
-            }
-            step = nextStep.Max();
-            if (nextStep.Distinct().Count() == 1) break;
-        }
-        
-        _partTwo = step.ToString();
+        _partTwo = AoCHelper.LeastCommonMultipleOfArray(simulNodes.Select(x => x.RepeatsAfter).ToArray(), 0).ToString();
     }
 }
