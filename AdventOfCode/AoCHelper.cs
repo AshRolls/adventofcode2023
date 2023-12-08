@@ -37,6 +37,31 @@ namespace AdventOfCode
             return GetCommonDivisor(b % a, a);
         }
 
+        //recursive implementation
+        public static int LeastCommonMultipleOfArray(int[] arr, int idx)
+        {
+            // lcm(a,b) = (a*b/gcd(a,b))
+            if (idx == arr.Length - 1)
+            {
+                return arr[idx];
+            }
+            int a = arr[idx];
+            int b = LeastCommonMultipleOfArray(arr, idx + 1);
+            return (a * b / GetCommonDivisor(a, b));
+        }
+
+        public static long LeastCommonMultipleOfArray(long[] arr, int idx)
+        {
+            // lcm(a,b) = (a*b/gcd(a,b))
+            if (idx == arr.Length - 1)
+            {
+                return arr[idx];
+            }
+            long a = arr[idx];
+            long b = LeastCommonMultipleOfArray(arr, idx + 1);
+            return (a * b / GetCommonDivisor(a, b));
+        }
+
         public static IEnumerable<long> GetAllDivisors(long[] arr, long N)
         {
             // Variable to find the gcd

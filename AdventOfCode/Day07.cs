@@ -33,44 +33,20 @@ public class Day07 : BaseDay
         foreach (Hand h in hands)
         {
             int singles = h.cards.Distinct().Count();
-            if (singles == 5) // high card
-            {
-                handTypes[6].Add(h);
-            }
-            else if (singles == 4) // one pair
-            {
-                handTypes[5].Add(h);
-            }
-            else if (singles == 1) // five of a kind
-            {
-                handTypes[0].Add(h);
-            }
+            if (singles == 5) handTypes[6].Add(h); // high card
+            else if (singles == 4) handTypes[5].Add(h); // one pair
+            else if (singles == 1) handTypes[0].Add(h); // five of a kind
             else if (singles == 2)
             {
-                if (getMaxGroupCount(h) == 4) // four of a kind
-                {
-                    handTypes[1].Add(h);
-                }
-                else // full house
-                {
-                    handTypes[2].Add(h);
-                }
+                if (getMaxGroupCount(h) == 4) handTypes[1].Add(h); // four of a kind
+                else handTypes[2].Add(h); // full house
             }
             else if (singles == 3)
             {
-                if (getMaxGroupCount(h) == 3) // three of a kind
-                {
-                    handTypes[3].Add(h);
-                }
-                else // two pair
-                {
-                    handTypes[4].Add(h);
-                }
+                if (getMaxGroupCount(h) == 3) handTypes[3].Add(h); // three of a kind
+                else handTypes[4].Add(h); // two pair
             }
-            else
-            {
-                throw new Exception();
-            }
+            else throw new Exception();
         }
 
         _partOne = calcWinnings(handTypes).ToString();
@@ -85,8 +61,7 @@ public class Day07 : BaseDay
             handTypes[i].Sort();
             foreach (Hand h in handTypes[i])
             {
-                winnings += h.bid * rank;
-                rank++;
+                winnings += h.bid * rank++;
             }
         }
 
@@ -122,8 +97,7 @@ public class Day07 : BaseDay
                 case 'T':
                     return 10;
                 case 'J':
-                    if (joker) return 1;
-                    return 11;
+                    return joker ? 1 : 11;                                        
                 case 'Q':
                     return 12;
                 case 'K':
@@ -180,44 +154,18 @@ public class Day07 : BaseDay
         {
             int distinct = h.cards.Distinct().Count(); 
             int jokers = h.cards.Where(x => x == 1).Count();
-            if (distinct == 5) // high card
-            {
-                if (jokers == 0) handTypes[6].Add(h);
-                else handTypes[5].Add(h);
-
-            }
-            else if (distinct == 4) // one pair
+            
+            if (distinct == 4) // one pair
             {
                 if (jokers == 0) handTypes[5].Add(h);
-                else if (jokers >= 1) handTypes[3].Add(h);                               
-            }
-            else if (distinct == 1) // five of a kind
-            {
-                handTypes[0].Add(h);
-            }
-            else if (distinct == 2)
-            {
-                if (jokers == 0)
-                {
-                    if (getMaxGroupCount(h) == 4) // four of a kind
-                    {
-                        handTypes[1].Add(h);                                         
-                    }
-                    else // full house
-                    {
-                        handTypes[2].Add(h);
-                    }
-                }
-                else handTypes[0].Add(h);
+                else handTypes[3].Add(h);                               
             }
             else if (distinct == 3)
             {
                 if (getMaxGroupCount(h) == 3) // three of a kind
                 {
                     if (jokers == 0) handTypes[3].Add(h);
-                    else if (jokers == 1) handTypes[1].Add(h);
-                    else if (jokers == 2) handTypes[0].Add(h);
-                    else if (jokers == 3) handTypes[1].Add(h);
+                    else handTypes[1].Add(h);
                 }
                 else // two pair
                 {
@@ -226,10 +174,22 @@ public class Day07 : BaseDay
                     else if (jokers >= 2) handTypes[1].Add(h);
                 }
             }
-            else
+            else if (distinct == 5) // high card
             {
-                throw new Exception();
+                if (jokers == 0) handTypes[6].Add(h);
+                else handTypes[5].Add(h);
             }
+            else if (distinct == 2)
+            {
+                if (jokers == 0)
+                {
+                    if (getMaxGroupCount(h) == 4) handTypes[1].Add(h);// four of a kind
+                    else handTypes[2].Add(h); // full house
+                }
+                else handTypes[0].Add(h);
+            }            
+            else if (distinct == 1) handTypes[0].Add(h); // five of a kind                    
+            else throw new Exception();
         }
 
         _partTwo = calcWinnings(handTypes).ToString();
