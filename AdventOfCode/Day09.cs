@@ -23,14 +23,9 @@ public class Day09 : BaseDay
     {
         int sum = 0;
         foreach (string s in  _input)
-        {                
+        {
             Stack<List<int>> diffs = new Stack<List<int>>();
-            var nums = AoCHelper.GetNumsFromStr(s);
-            diffs.Push(nums.ToList());
-            while (!diffs.Peek().All(x => x == 0))
-            {
-                diffs.Push(getDiffs(diffs.Peek()));
-            }
+            getDiffsStack(s, diffs);
 
             int newVal = 0;
             while (diffs.Count > 0)
@@ -40,6 +35,16 @@ public class Day09 : BaseDay
             sum += newVal;
         }
         _partOne = sum.ToString();
+    }
+
+    private void getDiffsStack(string s, Stack<List<int>> diffs)
+    {
+        var nums = AoCHelper.GetNumsFromStr(s);
+        diffs.Push(nums.ToList());
+        while (!diffs.Peek().All(x => x == 0))
+        {
+            diffs.Push(getDiffs(diffs.Peek()));
+        }
     }
 
     private List<int> getDiffs(List<int> diffs)
@@ -61,6 +66,19 @@ public class Day09 : BaseDay
 
     private void solve2()
     {
-        _partTwo = "Not Solved";
+        int sum = 0;
+        foreach (string s in _input)
+        {
+            Stack<List<int>> diffs = new Stack<List<int>>();
+            getDiffsStack(s, diffs);
+
+            int newVal = 0;
+            while (diffs.Count > 0)
+            {
+                newVal = diffs.Pop().First() - newVal;
+            }
+            sum += newVal;
+        }
+        _partTwo = sum.ToString();
     }
 }
