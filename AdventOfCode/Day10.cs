@@ -30,43 +30,20 @@ public class Day10 : BaseDay
 
     private void solve1()
     {
-        Tile[,] grid = new Tile[142,142];
-        for (int y = 0; y <= 141; y++)
-        {
-            for (int x = 0; x <= 141; x++)
-            {
-                Tile t = new Tile();
-                grid[x, y] = t;
-            }
-        }
-
-        Tile start = null;
-        (int x,int y) startXY = (0,0);        
-        for (int y = 1; y < 141; y++)
-        {
-            for (int x = 1; x < 141; x++)
-            {
-                if (parseChar(grid, x, y, _input[y-1][x-1]))
-                {
-                    start = grid[x, y];
-                    startXY = (x, y);                    
-                }
-            }
-        }
+        Tile[,] grid = new Tile[142, 142];
+        Tile start;
+        (int x, int y) startXY;
+        parseFile(grid, out start, out startXY);
 
         List<Tile> dirs = new List<Tile>();
-        Tile up = grid[startXY.x, startXY.y - 1];
-        Tile down = grid[startXY.x, startXY.y + 1];
-        Tile left = grid[startXY.x - 1, startXY.y];
-        Tile right = grid[startXY.x + 1, startXY.y];
+        findDirections(grid, start, startXY, dirs);
 
-        if (up.A == start || up.B == start) dirs.Add(up);
-        if (down.A == start || down.B == start) dirs.Add(down);
-        if (left.A == start || left.B == start) dirs.Add(left);
-        if (right.A == start || right.B == start) dirs.Add(right);
-
-        int steps = 0;
         HashSet<Tile> visited = new HashSet<Tile>();
+        _partOne = traverseLoop(start, dirs, 0, visited).ToString();
+    }
+
+    private static int traverseLoop(Tile start, List<Tile> dirs, int steps, HashSet<Tile> visited)
+    {
         Tile lastTile0 = start;
         Tile lastTile1 = start;
         Tile nextTile0 = dirs[0];
@@ -103,7 +80,46 @@ public class Day10 : BaseDay
             }
         }
 
-        _partOne = steps.ToString();
+        return steps;
+    }
+
+    private static void findDirections(Tile[,] grid, Tile start, (int x, int y) startXY, List<Tile> dirs)
+    {
+        Tile up = grid[startXY.x, startXY.y - 1];
+        Tile down = grid[startXY.x, startXY.y + 1];
+        Tile left = grid[startXY.x - 1, startXY.y];
+        Tile right = grid[startXY.x + 1, startXY.y];
+
+        if (up.A == start || up.B == start) dirs.Add(up);
+        if (down.A == start || down.B == start) dirs.Add(down);
+        if (left.A == start || left.B == start) dirs.Add(left);
+        if (right.A == start || right.B == start) dirs.Add(right);
+    }
+
+    private void parseFile(Tile[,] grid, out Tile start, out (int x, int y) startXY)
+    {
+        for (int y = 0; y <= 141; y++)
+        {
+            for (int x = 0; x <= 141; x++)
+            {
+                Tile t = new Tile();
+                grid[x, y] = t;
+            }
+        }
+
+        start = null;
+        startXY = (0, 0);
+        for (int y = 1; y < 141; y++)
+        {
+            for (int x = 1; x < 141; x++)
+            {
+                if (parseChar(grid, x, y, _input[y - 1][x - 1]))
+                {
+                    start = grid[x, y];
+                    startXY = (x, y);
+                }
+            }
+        }
     }
 
     private bool parseChar(Tile[,] grid, int x, int y, char c)
@@ -160,6 +176,29 @@ public class Day10 : BaseDay
 
     private void solve2()
     {
-        _partTwo = "Not Solved";
+        Tile[,] grid = new Tile[142, 142];
+        Tile start;
+        (int x, int y) startXY;
+        parseFile(grid, out start, out startXY);
+
+        List<Tile> dirs = new List<Tile>();
+        findDirections(grid, start, startXY, dirs);
+
+        HashSet<Tile> visited = new HashSet<Tile>();
+        traverseLoop(start, dirs, 0, visited).ToString();
+        visited.Add(start);
+
+        int area = 0;
+        for (int y = 1; y < 141; y++)
+        {
+            bool inside = false;
+            for (int x = 1; x < 141; x++)
+            {       
+                if ( ((grid[x, y].C == '|') || (grid[x, y].C == '7') || (grid[x, y].C == 'F') || (grid[x, y].C == 'S')) && visited.Contains(grid[x, y])) inside = !inside;
+                else if (inside && !visited.Contains(grid[x,y])) area++;
+            }
+        }
+
+        _partTwo = area.ToString();
     }
 }
